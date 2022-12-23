@@ -1,3 +1,3 @@
-pub fn solve() {
-    println!("solving p2");
+pub fn solve(input: &str) -> i32 {
+    0
 }
