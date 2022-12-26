@@ -1,4 +1,4 @@
-use aoc2022::input::get_input;
+use aoc2022::get_input;
 
 mod p1;
 mod p2;
