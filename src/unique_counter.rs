@@ -9,35 +9,32 @@ use std::hash::Hash;
 
 pub struct UniqCounter<T> {
     items: HashMap<T, i32>, // entry -> count of entry
-    dups: i32,              // number of duplicate entries in the counter
+    load: i32,              // total number of counted entries
 }
 
-impl<T: Eq + Hash + Copy> UniqCounter<T> {
+impl<T: Eq + Hash> UniqCounter<T> {
     pub fn new(capacity: usize) -> Self {
         UniqCounter {
             items: HashMap::with_capacity(capacity),
-            dups: 0,
+            load: 0,
         }
     }
 
     pub fn is_unique(&self) -> bool {
-        self.dups == 0
+        self.load == self.items.len() as i32
     }
 
     pub fn add(&mut self, v: T) {
-        if self.items.contains_key(&v) {
-            self.dups += 1
-        }
+        self.load += 1;
         *self.items.entry(v).or_default() += 1
     }
 
     pub fn remove(&mut self, v: T) {
         if let Some(&n) = self.items.get(&v) {
+            self.load -= 1;
             if n == 1 {
                 self.items.remove(&v);
                 return;
-            } else {
-                self.dups -= 1;
             }
             self.items.insert(v, n - 1);
         }
