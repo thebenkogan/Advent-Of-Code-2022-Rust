@@ -4,29 +4,29 @@
 
 // Used in day 6 to create an efficient sliding window that maintains uniqueness.
 
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::hash::Hash;
 
 pub struct UniqCounter<T> {
-    items: HashMap<T, i32>,
-    dups: HashSet<T>,
+    items: HashMap<T, i32>, // entry -> count of entry
+    dups: i32,              // number of duplicate entries in the counter
 }
 
 impl<T: Eq + Hash + Copy> UniqCounter<T> {
     pub fn new(capacity: usize) -> Self {
         UniqCounter {
             items: HashMap::with_capacity(capacity),
-            dups: HashSet::with_capacity(capacity),
+            dups: 0,
         }
     }
 
     pub fn is_unique(&self) -> bool {
-        self.dups.is_empty()
+        self.dups == 0
     }
 
     pub fn add(&mut self, v: T) {
         if self.items.contains_key(&v) {
-            self.dups.insert(v);
+            self.dups += 1
         }
         *self.items.entry(v).or_default() += 1
     }
@@ -36,9 +36,8 @@ impl<T: Eq + Hash + Copy> UniqCounter<T> {
             if n == 1 {
                 self.items.remove(&v);
                 return;
-            }
-            if n == 2 {
-                self.dups.remove(&v);
+            } else {
+                self.dups -= 1;
             }
             self.items.insert(v, n - 1);
         }
