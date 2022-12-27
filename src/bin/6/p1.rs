@@ -1,23 +1,28 @@
 use std::collections::VecDeque;
 
-use itertools::Itertools;
+use aoc2022::unique_counter::UniqCounter;
 
 const WINDOW_SIZE: usize = 4;
 
 pub fn solve(input: &str) -> i32 {
+    let mut counter = UniqCounter::new(WINDOW_SIZE);
     let mut window: VecDeque<char> = VecDeque::with_capacity(WINDOW_SIZE);
     for (i, c) in input.chars().enumerate() {
-        if window.len() < WINDOW_SIZE {
+        if i < WINDOW_SIZE {
+            counter.add(c);
             window.push_front(c);
             continue;
         }
 
-        if window.iter().unique().count() == window.len() {
+        if counter.is_unique() {
             return i as i32;
         }
 
-        window.pop_back();
+        if let Some(removed) = window.pop_back() {
+            counter.remove(removed);
+        }
         window.push_front(c);
+        counter.add(c);
     }
 
     unreachable!()

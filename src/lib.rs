@@ -1,5 +1,7 @@
 use std::{env, fmt::Display, fs, time::Instant};
 
+pub mod unique_counter;
+
 pub fn run_day<T: Display>(day: i32, p1: fn(&str) -> T, p2: fn(&str) -> T) {
     let (input, bench) = get_input(day);
     if bench {
