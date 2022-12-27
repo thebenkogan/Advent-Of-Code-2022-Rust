@@ -1,4 +1,4 @@
-use aoc2022::get_input;
+use aoc2022::run_day;
 
 mod p1;
 mod p2;
@@ -6,8 +6,5 @@ mod p2;
 const DAY: i32 = 1;
 
 fn main() {
-    let input = get_input(DAY);
-
-    println!("Part 1: {}", p1::solve(&input));
-    println!("Part 2: {}", p2::solve(&input));
+    run_day(DAY, p1::solve, p2::solve);
 }
