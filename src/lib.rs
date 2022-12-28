@@ -1,4 +1,9 @@
-use std::{env, fmt::Display, fs, time::Instant};
+use std::{
+    env,
+    fmt::Display,
+    fs,
+    time::{Duration, Instant},
+};
 
 pub mod unique_counter;
 
@@ -30,12 +35,20 @@ fn run_parts<T: Display>(p1: fn(&str) -> T, p2: fn(&str) -> T, input: &str) {
     println!("Part 2: {}", p2(input));
 }
 
-fn benchmark_parts<T>(p1: fn(&str) -> T, p2: fn(&str) -> T, input: &str) {
-    let p1_start = Instant::now();
-    p1(input);
-    println!("Part 1 Time: {:?}", p1_start.elapsed());
+const NUM_TRIALS: u32 = 100;
 
-    let p2_start = Instant::now();
-    p2(input);
-    println!("Part 2 Time: {:?}", p2_start.elapsed());
+fn benchmark_parts<T>(p1: fn(&str) -> T, p2: fn(&str) -> T, input: &str) {
+    println!("Part 1 Time: {:?}", benchmark_part(p1, input));
+    println!("Part 2 Time: {:?}", benchmark_part(p2, input));
+}
+
+fn benchmark_part<T>(p: fn(&str) -> T, input: &str) -> Duration {
+    let mut total = Duration::ZERO;
+    for _ in 0..NUM_TRIALS {
+        let start = Instant::now();
+        p(input);
+        let elapsed = start.elapsed();
+        total += elapsed
+    }
+    total / NUM_TRIALS
 }
