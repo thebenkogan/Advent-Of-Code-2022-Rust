@@ -5,11 +5,11 @@ const DIR: [(i32, i32); 4] = [(1, 0), (-1, 0), (0, 1), (0, -1)];
 fn parse_input(input: &str) -> Vec<Vec<i32>> {
     let mut out = Vec::new();
     for row in input.split('\n') {
-        let mut parsed_row = Vec::new();
-        for c in row.chars() {
-            parsed_row.push(c.to_digit(10).unwrap() as i32);
-        }
-        out.push(parsed_row);
+        out.push(
+            row.chars()
+                .map(|c| c.to_digit(10).unwrap() as i32)
+                .collect(),
+        );
     }
     out
 }
